@@ -2,6 +2,6 @@
 ### MORAI 공모전 ADSC부분
 
 #### Members:
-    "Mun Ha-neul"
-    "Song Dong-hyeon"
-    "Park Young-woong"
+####    "Mun Ha-neul"
+####    "Song Dong-hyeon"
+####    "Park Young-woong"
