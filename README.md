@@ -23,6 +23,9 @@
 
 
 3. GPS
+   
+   ![image](https://user-images.githubusercontent.com/80820166/173223555-4ce6b1a7-6b80-4baf-80ad-9738a8c958c4.png)
+
 4. IMU
 
 
