@@ -26,8 +26,4 @@
 4. IMU
 
 
-###실행 예시
-
-![Screenshot from 2022-05-02 04-59-37](https://user-images.githubusercontent.com/80820166/173222759-9696e018-ee18-41c8-9b1e-ad917fa11b6f.png)
-
 
