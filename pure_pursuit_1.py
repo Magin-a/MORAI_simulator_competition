@@ -15,10 +15,10 @@ from tf.transformations import euler_from_quaternion,quaternion_from_euler
 class pure_pursuit :
     def __init__(self):
         rospy.init_node('pure_pursuit', anonymous=True)
-        rospy.Subscriber("local_path", Path, self.path_callback)
-        rospy.Subscriber("odom", Odometry, self.odom_callback)
+        rospy.Subscriber("local_path", Path, self.path_callback) #경로 데이터 sub
+        rospy.Subscriber("odom", Odometry, self.odom_callback) #Gps 좌표값 sub
         self.ctrl_cmd_pub = rospy.Publisher('ctrl_cmd',CtrlCmd, queue_size=1)
-        self.ctrl_cmd_msg=CtrlCmd()
+        self.ctrl_cmd_msg=CtrlCmd()# 차량 상태값 
         self.ctrl_cmd_msg.longlCmdType=2
 
         self.is_path=False
@@ -31,33 +31,33 @@ class pure_pursuit :
         self.lfd=3
 
         rate = rospy.Rate(30) # 30hz
-        while not rospy.is_shutdown():
+        while not rospy.is_shutdown(): #무한루프문
 
-            if self.is_path ==True and self.is_odom==True  :
+            if self.is_path ==True and self.is_odom==True  : # 각 콜백함수에서 현재 상태 확인
                 
                 vehicle_position=self.current_postion
                 self.is_look_forward_point= False
 
-                translation=[vehicle_position.x, vehicle_position.y]
+                translation=[vehicle_position.x, vehicle_position.y] # 차량 현재 좌표값 X Y
 
                 t=np.array([
                         [cos(self.vehicle_yaw), -sin(self.vehicle_yaw),translation[0]],
                         [sin(self.vehicle_yaw),cos(self.vehicle_yaw),translation[1]],
-                        [0                    ,0                    ,1            ]])
+                        [0                    ,0                    ,1            ]]) #Yaw 값
 
                 det_t=np.array([
                        [t[0][0],t[1][0],-(t[0][0]*translation[0]+t[1][0]*translation[1])],
                        [t[0][1],t[1][1],-(t[0][1]*translation[0]+t[1][1]*translation[1])],
                        [0      ,0      ,1                                               ]])
 
-                for num,i in enumerate(self.path.poses) :
+                for num,i in enumerate(self.path.poses) : # 경로를 순서대로 읽어오기
                     path_point=i.pose.position
 
                     global_path_point=[path_point.x,path_point.y,1]
-                    local_path_point=det_t.dot(global_path_point)           
+                    local_path_point=det_t.dot(global_path_point)   #행렬곱        
                     if local_path_point[0]>0 :
                         dis=sqrt(pow(local_path_point[0],2)+pow(local_path_point[1],2))
-                        if dis>= self.lfd :
+                        if dis>= self.lfd : #노드간격
                             self.forward_point=path_point
                             self.is_look_forward_point=True
                             break
@@ -67,7 +67,7 @@ class pure_pursuit :
                     self.ctrl_cmd_msg.steering=atan2((2*self.vehicle_length*sin(theta)),self.lfd)
                     self.ctrl_cmd_msg.velocity=30.0
                     print(self.ctrl_cmd_msg.steering)
-                else : 
+                else : #노드를 못 찾을 경우
                     print("no found forward point")
                     self.ctrl_cmd_msg.steering=0.0
                     self.ctrl_cmd_msg.velocity=0.0
