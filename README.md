@@ -2,7 +2,7 @@
 ### MORAI 공모전 ADSC부분
 
 #### Members:
-   - Park Young-woong(팀장) 
+   - Park Yeong-ung(팀장) 
    - Mun Ha-neul
    - Song Dong-hyeon
 
